@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/wrangler@latest/config-schema.json",
+  "name": "birthday-glass-cake",
+  "compatibility_date": "2026-09-29",
+  "assets": {
+    "directory": "./"
+  },
+  "r2_buckets": [
+    {
+      "binding": "BIRTHDAY_GLASS_CAKE_MEDIA",
+      "bucket_name": "birthday-glass-cake-media"
+    }
+  ]
+}

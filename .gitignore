@@ -1,0 +1,8 @@
+# Large local-development copies. Production video is served only from the dedicated R2 bucket.
+assets/video-1.mp4
+assets/video-2.mp4
+
+# Local and generated artifacts
+outputs/
+work/
+.DS_Store

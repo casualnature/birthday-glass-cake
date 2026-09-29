@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f0df" />
+    <title>Happy Birthday</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237c0b18'/%3E%3Cpath d='M14 26h36v24H14z' fill='%23fff5df' stroke='%23d6a330' stroke-width='3'/%3E%3Cpath d='M32 26v24M14 36h36' stroke='%237c0b18' stroke-width='4'/%3E%3Cpath d='M32 11c-7-7-17 3 0 15 17-12 7-22 0-15Z' fill='%23d6a330'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css?v=9" />
+  </head>
+  <body>
+    <main class="card" aria-live="polite">
+      <button class="sound-toggle" id="soundToggle" type="button" aria-label="Sound on" aria-pressed="false">
+        <span aria-hidden="true">🔊</span><span class="sound-label">Sound ON</span>
+      </button>
+
+      <section class="screen top-screen active" data-screen="top" aria-label="Birthday card welcome">
+        <div class="opening-stage">
+          <img class="opening-image" src="assets/opening.png" alt="Happy Birthday with a wrapped gift" />
+          <button class="image-start-button" id="startButton" type="button" aria-label="Start birthday card">
+            <span class="sr-only">START</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="screen video-screen" data-screen="video1" aria-label="Birthday video">
+        <div class="video-layout">
+          <div class="video-frame"><video id="video1" playsinline preload="metadata"></video></div>
+          <button class="card-button is-hidden" id="candlesButton" type="button">Light the Candles</button>
+        </div>
+      </section>
+
+      <section class="screen video-screen" data-screen="video2" aria-label="Birthday candle video">
+        <div class="video-layout">
+          <div class="video-frame"><video id="video2" playsinline preload="metadata"></video></div>
+          <div class="letter-prompt" id="letterPrompt" hidden>
+            <p>A letter has arrived for you.</p>
+            <button class="card-button" id="letterButton" type="button">Open the Letter</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen letter-screen" data-screen="letter" aria-label="Birthday letter">
+        <div class="letter-frame">
+          <img class="letter-image" src="assets/letter.png" alt="Ornate birthday letter" />
+          <article class="letter-copy" id="letterCopy">
+            <p class="salutation" id="recipientLine"></p>
+            <p class="message" id="messageLine"></p>
+            <p class="signature" id="senderLine"></p>
+          </article>
+        </div>
+        <button class="card-button replay-button" id="replayButton" type="button">Replay</button>
+      </section>
+    </main>
+
+    <audio id="bgm" loop preload="metadata"><source src="assets/birthday-magical.wav" type="audio/wav" /></audio>
+    <script src="media-config.js?v=4"></script>
+    <script src="script.js?v=4"></script>
+  </body>
+</html>

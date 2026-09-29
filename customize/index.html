@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fffaf1" />
+    <title>Create Your Birthday Card</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="customizer">
+      <section class="customizer-card" aria-labelledby="pageTitle">
+        <p class="eyebrow">Birthday Glass Cake</p>
+        <h1 id="pageTitle">Create Your Birthday Card</h1>
+        <p class="intro">Personalize the name, message, and sender below. Preview the full card, then create your gift link to share.</p>
+
+        <form id="customizationForm" novalidate>
+          <div class="field-group">
+            <label for="recipientName">Recipient Name</label>
+            <input id="recipientName" name="recipientName" type="text" autocomplete="name" aria-describedby="recipientHelp recipientError" />
+            <p class="field-help" id="recipientHelp">Up to 30 characters</p>
+            <p class="field-error" id="recipientError" aria-live="polite"></p>
+          </div>
+
+          <div class="field-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="7" aria-describedby="messageHelp messageError messageCount"></textarea>
+            <div class="field-meta"><span id="messageHelp">Up to 200 characters</span><span id="messageCount" aria-live="polite">0 / 200</span></div>
+            <p class="field-error" id="messageError" aria-live="polite"></p>
+          </div>
+
+          <div class="field-group">
+            <label for="senderName">From</label>
+            <input id="senderName" name="senderName" type="text" autocomplete="name" aria-describedby="senderHelp senderError" />
+            <p class="field-help" id="senderHelp">Up to 40 characters</p>
+            <p class="field-error" id="senderError" aria-live="polite"></p>
+          </div>
+
+          <div class="actions">
+            <button class="button button-secondary" id="previewButton" type="button">Preview Full Card</button>
+            <button class="button" id="generateButton" type="button">Generate Gift URL</button>
+          </div>
+        </form>
+
+        <section class="gift-link-section" id="giftLinkSection" hidden aria-labelledby="giftLinkHeading">
+          <h2 id="giftLinkHeading">Your Gift Link</h2>
+          <p>Anyone with the generated link can open the card. Please avoid including private or sensitive information in your message.</p>
+          <label class="sr-only" for="giftLink">Generated gift link</label>
+          <input id="giftLink" type="url" readonly />
+          <div class="actions gift-actions">
+            <button class="button button-secondary" id="copyButton" type="button">Copy Gift Link</button>
+            <button class="button" id="openButton" type="button">Open Finished Card</button>
+          </div>
+          <p class="status" id="copyStatus" role="status"></p>
+        </section>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
