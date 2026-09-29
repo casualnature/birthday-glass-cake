@@ -55,9 +55,10 @@
     soundToggle.setAttribute("aria-label", muted ? "Sound off" : "Sound on");
     soundToggle.innerHTML = `<span aria-hidden="true">${muted ? "🔇" : "🔊"}</span><span class="sound-label">Sound ${muted ? "OFF" : "ON"}</span>`;
   }
-  async function playBgm() {
+  function playBgm() {
     if (!started || muted) return;
-    try { await bgm.play(); } catch { /* Browser policy can still prevent playback after a delayed action. */ }
+    const playback = bgm.play();
+    if (playback) playback.catch(() => { /* Browser policy can still prevent playback. */ });
   }
   async function playVideo(video) {
     try { await video.play(); } catch { /* Native controls are intentionally omitted to keep the framed experience simple. */ }
@@ -83,10 +84,11 @@
   }
 
   document.querySelector("#startButton").addEventListener("click", () => {
-    started = true;
     resetMedia();
-    showScreen("video1");
+    started = true;
+    // Keep this call directly in the user gesture for iOS/WebKit audio authorization.
     playBgm();
+    showScreen("video1");
     playVideo(video1);
   });
   video1.addEventListener("ended", () => candlesButton.classList.remove("is-hidden"));
