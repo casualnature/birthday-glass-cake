@@ -51,22 +51,38 @@
     bgm.muted = muted;
     video1.muted = muted;
     video2.muted = muted;
+    if (muted) bgm.pause();
     soundToggle.setAttribute("aria-pressed", String(muted));
     soundToggle.setAttribute("aria-label", muted ? "Sound off" : "Sound on");
     soundToggle.innerHTML = `<span aria-hidden="true">${muted ? "🔇" : "🔊"}</span><span class="sound-label">Sound ${muted ? "OFF" : "ON"}</span>`;
   }
   function playBgm() {
     if (!started || muted) return;
+    bgm.muted = false;
     const playback = bgm.play();
     if (playback) playback.catch(() => { /* Browser policy can still prevent playback. */ });
   }
   async function playVideo(video) {
     try { await video.play(); } catch { /* Native controls are intentionally omitted to keep the framed experience simple. */ }
   }
-  function resetMedia() {
-    [video1, video2, bgm].forEach(media => { media.pause(); media.currentTime = 0; });
+  function resetVideos() {
+    [video1, video2].forEach(video => {
+      video.pause();
+      try { video.currentTime = 0; } catch { /* Video metadata may not be available yet. */ }
+    });
     candlesButton.classList.add("is-hidden");
     letterPrompt.hidden = true;
+  }
+  function stopAndResetBgm() {
+    bgm.pause();
+    if (bgm.readyState > 0) {
+      try { bgm.currentTime = 0; } catch { /* Seeking can be unavailable while media initializes. */ }
+    }
+  }
+  function pauseAllMedia() {
+    bgm.pause();
+    video1.pause();
+    video2.pause();
   }
   function fitLetterText() {
     let size = Math.min(22, Math.max(12, window.innerWidth * 0.033));
@@ -84,10 +100,16 @@
   }
 
   document.querySelector("#startButton").addEventListener("click", () => {
-    resetMedia();
     started = true;
-    // Keep this call directly in the user gesture for iOS/WebKit audio authorization.
-    playBgm();
+    // Keep play() directly in this user gesture for iOS/WebKit audio authorization.
+    if (!muted) {
+      bgm.muted = false;
+      const playback = bgm.play();
+      if (playback && typeof playback.catch === "function") {
+        playback.catch(error => console.debug("BGM play rejected:", error?.name, error?.message));
+      }
+    }
+    resetVideos();
     showScreen("video1");
     playVideo(video1);
   });
@@ -103,15 +125,26 @@
     showScreen("letter");
   });
   document.querySelector("#replayButton").addEventListener("click", () => {
-    resetMedia();
+    resetVideos();
+    stopAndResetBgm();
     started = false;
     showScreen("top");
   });
   soundToggle.addEventListener("click", () => {
     muted = !muted;
     applySound();
-    if (!muted) playBgm();
+    if (!muted && started) {
+      bgm.muted = false;
+      const playback = bgm.play();
+      if (playback && typeof playback.catch === "function") {
+        playback.catch(error => console.debug("BGM play rejected:", error?.name, error?.message));
+      }
+    }
   });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) pauseAllMedia();
+  });
+  window.addEventListener("pagehide", pauseAllMedia);
   window.addEventListener("resize", () => {
     if (document.querySelector('[data-screen="letter"]').classList.contains("active")) fitLetterText();
   });
