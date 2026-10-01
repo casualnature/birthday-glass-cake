@@ -10,6 +10,7 @@
   const video2 = document.querySelector("#video2");
   const soundToggle = document.querySelector("#soundToggle");
   const candlesButton = document.querySelector("#candlesButton");
+  const letterButton = document.querySelector("#letterButton");
   const letterPrompt = document.querySelector("#letterPrompt");
   const letterCopy = document.querySelector("#letterCopy");
   let started = false;
@@ -27,6 +28,7 @@
   let bgmDecodePromise = null;
   let audioUnlocked = false;
   let bgmShouldPlay = false;
+  const revealDelay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 500;
 
   const media = window.BirthdayGlassCakeMedia;
   video1.src = media.VIDEO_1_URL;
@@ -70,7 +72,7 @@
         currentScreen.classList.remove("is-leaving");
       };
       currentScreen.addEventListener("animationend", removeLeavingScreen, { once: true });
-      window.setTimeout(removeLeavingScreen, 450);
+      window.setTimeout(removeLeavingScreen, 650);
     }
 
     nextScreen.classList.remove("is-leaving");
@@ -189,6 +191,10 @@
     candlesButton.classList.add("is-hidden");
     letterPrompt.hidden = true;
   }
+  function enableAfterFade(button) {
+    button.disabled = true;
+    window.setTimeout(() => { button.disabled = false; }, revealDelay);
+  }
   function stopAndResetBgm() {
     bgmShouldPlay = false;
     stopBgm(true);
@@ -226,13 +232,19 @@
     showScreen("video1");
     playVideo(video1);
   });
-  video1.addEventListener("ended", () => candlesButton.classList.remove("is-hidden"));
+  video1.addEventListener("ended", () => {
+    candlesButton.classList.remove("is-hidden");
+    enableAfterFade(candlesButton);
+  });
   candlesButton.addEventListener("click", () => {
     candlesButton.classList.add("is-hidden");
     showScreen("video2");
     playVideo(video2);
   });
-  video2.addEventListener("ended", () => { letterPrompt.hidden = false; });
+  video2.addEventListener("ended", () => {
+    letterPrompt.hidden = false;
+    enableAfterFade(letterButton);
+  });
   document.querySelector("#letterButton").addEventListener("click", () => {
     populateLetter();
     showScreen("letter");
