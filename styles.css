@@ -25,8 +25,10 @@ button { font: inherit; }
   min-height: 100dvh;
   opacity: 0;
 }
-.screen.active { display: flex; animation: fade-in 360ms ease forwards; }
-@keyframes fade-in { to { opacity: 1; } }
+.screen.active { display: flex; animation: fade-in 400ms ease forwards; }
+.screen.is-leaving { position: absolute; inset: 0; z-index: 1; display: flex; width: 100%; min-height: 100dvh; pointer-events: none; animation: fade-out 400ms ease forwards; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
 
 .sound-toggle {
   position: fixed;
@@ -65,7 +67,9 @@ button { font: inherit; }
 .is-hidden { display: none; }
 .letter-prompt { display: grid; justify-items: center; gap: 0.4rem; text-align: center; }
 .letter-prompt[hidden] { display: none; }
+#candlesButton:not(.is-hidden), .letter-prompt:not([hidden]) { animation: content-fade-in 300ms ease both; }
 .letter-prompt p { margin: 0; font-size: clamp(1.15rem, 4.8vw, 1.55rem); }
+@keyframes content-fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 .letter-screen { flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; padding: 4.5rem 0.75rem 2rem; }
 .letter-frame { position: relative; width: min(94vw, 35rem); aspect-ratio: 1122 / 1400; }
@@ -88,4 +92,7 @@ button { font: inherit; }
   .video-layout { width: min(68vh, 75vw); gap: .7rem; }
   .letter-screen { padding: 3.5rem 1rem 1rem; flex-direction: row; }
   .letter-frame { width: min(45vh, 48vw); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen.active, .screen.is-leaving, #candlesButton:not(.is-hidden), .letter-prompt:not([hidden]) { animation-duration: 1ms; }
 }

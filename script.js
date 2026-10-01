@@ -56,7 +56,25 @@
   const cardData = getCardData();
 
   function showScreen(name) {
-    screens.forEach(screen => screen.classList.toggle("active", screen.dataset.screen === name));
+    const nextScreen = screens.find(screen => screen.dataset.screen === name);
+    const currentScreen = screens.find(screen => screen.classList.contains("active"));
+    if (!nextScreen || currentScreen === nextScreen) return;
+
+    if (currentScreen) {
+      currentScreen.classList.remove("active");
+      currentScreen.classList.add("is-leaving");
+      let cleanedUp = false;
+      const removeLeavingScreen = () => {
+        if (cleanedUp) return;
+        cleanedUp = true;
+        currentScreen.classList.remove("is-leaving");
+      };
+      currentScreen.addEventListener("animationend", removeLeavingScreen, { once: true });
+      window.setTimeout(removeLeavingScreen, 450);
+    }
+
+    nextScreen.classList.remove("is-leaving");
+    nextScreen.classList.add("active");
   }
   function applySound() {
     video1.muted = muted;
